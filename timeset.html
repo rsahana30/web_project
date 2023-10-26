@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hourglass Timer</title>
+    <style>
+        body {
+           
+            font-family: Arial, sans-serif;
+             background-image: url('https://wallpapercave.com/wp/AYQhetv.jpg'); /* Background color for the entire page */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white; /* Background color for the content container */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .hourglass {
+            font-size: 48px;
+        }
+
+        input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: rgb(245, 177, 60);
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body  >
+    <div class="container">
+        <h1>Hourglass Timer</h1>
+        <div class="hourglass" id="hourglass">00:00</div>
+        <br>
+        <label for="minutes">Set Time (minutes):</label>
+        <input type="number" id="minutes" min="1" value="1">
+        <br>
+        <button id="startButton" onclick="startTimer()">Start</button>
+        <button id="stopButton" onclick="stopTimer()" disabled>Stop</button>
+    </div>
+
+    <script>
+        
+        let timerInterval;
+        let remainingTime = 0;
+
+        function startTimer() {
+            const minutesInput = document.getElementById("minutes");
+            const startButton = document.getElementById("startButton");
+            const stopButton = document.getElementById("stopButton");
+
+            const minutes = parseInt(minutesInput.value);
+            remainingTime = minutes * 60;
+
+            startButton.disabled = true;
+            minutesInput.disabled = true;
+            stopButton.disabled = false;
+
+            updateHourglass();
+
+            timerInterval = setInterval(() => {
+                if (remainingTime > 0) {
+                    remainingTime--;
+                    updateHourglass();
+                } else {
+                    clearInterval(timerInterval);
+                    alert("Timer Finished!");
+                    startButton.disabled = false;
+                    minutesInput.disabled = false;
+                    stopButton.disabled = true;
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            alert("Timer Stopped!");
+            document.getElementById("startButton").disabled = false;
+            document.getElementById("minutes").disabled = false;
+            document.getElementById("stopButton").disabled = true;
+        }
+
+        function updateHourglass() {
+            const hourglass = document.getElementById("hourglass");
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            const minutesDisplay = String(minutes).padStart(2, "0");
+            const secondsDisplay = String(seconds).padStart(2, "0");
+            hourglass.textContent = `${minutesDisplay}:${secondsDisplay}`;
+        }
+    
+    </script>
+</body>
+</html>
